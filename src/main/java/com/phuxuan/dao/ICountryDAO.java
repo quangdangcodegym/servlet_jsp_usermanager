@@ -1,4 +1,4 @@
-package dao;
+package com.phuxuan.dao;
 
 import java.util.List;
 

@@ -31,7 +31,7 @@
                 <td><c:out value="${user.email}"/></td>
                 <td>
                 
-                	<c:forEach var="c" items="${listCountry}">
+                	<c:forEach var="c" items="${applicationScope.listCountry}">
                 		<c:if test="${user.getCountry() == c.getId() }">
                 			<c:out value="${c.name }"/>
                 		</c:if>

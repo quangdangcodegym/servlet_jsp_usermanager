@@ -1,4 +1,4 @@
-package dao;
+package com.phuxuan.dao;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -19,4 +19,6 @@ public interface IUserDAO {
     
     public List<User> viewAllUsers(int offset, int noOfRecords, String query, int country);
     public int getNoOfRecords();
+    
+    public User selectUserByEmail(String _email);
 }

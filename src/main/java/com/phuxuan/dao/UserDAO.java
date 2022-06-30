@@ -1,5 +1,6 @@
-package dao;
+package com.phuxuan.dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -26,6 +27,9 @@ public class UserDAO implements IUserDAO{
     private static final String SELECT_ALL_USERS = "select * from users";
     private static final String DELETE_USERS_SQL = "delete from users where id = ?;";
     private static final String UPDATE_USERS_SQL = "update users set name = ?,email= ?, country =? where id = ?;";
+    private static final String SELCT_USER_BY_EMAIL = "select u.id,u.name,u.email, u.country_id \r\n"
+    		+ "from users as u inner join country as c \r\n"
+    		+ "where u.email = ? and u.country_id = c.id;";
 
     public UserDAO() {
     }
@@ -55,7 +59,14 @@ public class UserDAO implements IUserDAO{
 	    User user = null;
 	    
 	    Connection connection = null;
+	    
+	    
+	    //Statement
 	    PreparedStatement  stmt = null;
+	    
+	    //CallableStatement
+	    
+	    
 	    String queryDB = "";
 	    try {
 	    	connection = getConnection();
@@ -150,6 +161,36 @@ public class UserDAO implements IUserDAO{
         return user;
     }
 
+    public User selectUserByEmail(String _email) {
+    	User user = null;
+        // Step 1: Establishing a Connection
+        try (Connection connection = getConnection();
+             // Step 2:Create a statement using connection object
+        		//SELCT_USER_BY_EMAIL = "select id,name,email from users where email = ?";
+             PreparedStatement preparedStatement = connection.prepareStatement(SELCT_USER_BY_EMAIL);) {
+            preparedStatement.setString(1, _email);
+            System.out.println(preparedStatement);
+            // Step 3: Execute the query or update query
+            ResultSet rs = preparedStatement.executeQuery();
+
+            // Step 4: Process the ResultSet object.
+            while (rs.next()) {
+            	int id  = rs.getInt("id");
+                String name = rs.getString("name");
+                String email = rs.getString("email");
+                int idCountry = rs.getInt("country_id");
+                user = new User(id, name, email, idCountry);
+                
+                return user;
+            }
+            return null;
+        } catch (SQLException e) {
+        	printSQLException(e);
+        	return null;
+            
+        }
+
+    }
     public List<User> selectAllUsers() {
 
         // using try-with-resources to avoid closing resources (boiler plate code)

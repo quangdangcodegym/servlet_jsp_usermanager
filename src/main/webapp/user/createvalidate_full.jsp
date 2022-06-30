@@ -11,38 +11,38 @@
     <h2>
         <a href="/users">List All Users</a>
     </h2>
-    <%!
-    	String hello;
-    %>
-    
-    <%
-		//below line will navigate us to other resource let’s say google for now
-		hello = request.getServletPath();
-		System.out.println("Test jsp: " + application.getAttribute("listCountry"));
-		
-	%>
-	<h1><%= hello %></h1>
-	<c:out value="${hello }"></c:out>
 </center>
 <div align="center">
-
     <form method="post">
         <table border="1" cellpadding="5">
             <caption>
                 <h2>Add New User</h2>
             </caption>
+            <input type = "hidden" name ="id" value="${user.getId()}"/>
             <tr>
                 <th>User Name:</th>
                 <td>
-                    <input type="text" name="name" id="name" size="45"/>
+                    <input type="text" name="name" id="name" size="45" value ="${user.getName() }"/>
                 </td>
             </tr>
             <tr>
                 <th>User Email:</th>
                 <td>
-                    <input type="text" name="email" id="email" size="45"/>
+                    <input type="text" name="email" id="email" size="45" value ="${user.getEmail() }"/>
                 </td>
             </tr>
+            <tr>
+                <th>User password:</th>
+                <td>
+                    <input type="password" name="password" id="password" size="45" value ="${user.getPassword() }"/>
+                </td>
+            </tr>
+            <!-- <tr>
+                <th>User country:</th>
+                <td>
+                    <input type="text" name="country" size="45" value ="..."/>
+                </td>
+            </tr> -->
             <tr>
                 <th>Country:</th>
                 <td>
@@ -63,6 +63,9 @@
             </tr>
         </table>
     </form>
+    <div>
+    	${errors }"
+    </div>
 </div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-package dao;
+package com.phuxuan.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,7 +19,8 @@ public class CountryDAO implements ICountryDAO{
 
 
     private static final String SELECT_ALL_COUNTRY = "select * from country";
-
+    private static final  String SELECT_COUNTRY_ID = "select * from country where id = ? ; ";
+    
     public CountryDAO() {
     }
 
@@ -61,6 +62,35 @@ public class CountryDAO implements ICountryDAO{
         }
         return countries;
 	}
+	
+	public Country selectCountry(int idCountry) {
+		Country country = null;
+        // Step 1: Establishing a Connection
+        try (Connection connection = getConnection();
+             // Step 2:Create a statement using connection object
+        		//SELCT_USER_BY_EMAIL = "select id,name,email from users where email = ?";
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_COUNTRY_ID);) {
+            preparedStatement.setInt(1, idCountry);
+            System.out.println(preparedStatement);
+            // Step 3: Execute the query or update query
+            ResultSet rs = preparedStatement.executeQuery();
+
+            // Step 4: Process the ResultSet object.
+            while (rs.next()) {
+            	int id  = rs.getInt("id");
+                String name = rs.getString("name");
+                country  = new Country(id, name);
+                
+                return country;
+            }
+            return null;
+        } catch (SQLException e) {
+        	printSQLException(e);
+        	return null;
+            
+        }
+
+    }
 	private void printSQLException(SQLException ex) {
         for (Throwable e : ex) {
             if (e instanceof SQLException) {
